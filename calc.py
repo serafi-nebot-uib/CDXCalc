@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-# import graphviz
-
 from math import log, ceil
 
 def info(p: float) -> float: return log(1 / p, 2)
@@ -41,58 +39,54 @@ def stats(f: list, m: list | None = None):
     print(f"{'noise:':>15} {noise(f, m)}")
   print()
 
-X = [
-  ("x1", 0.35, "00"),
-  ("x2", 0.15, "01"),
-  ("x3", 0.50, "10"),
-]
-M = [
-  [0.72, 0.04, 0.15, 0.09],
-  [0.12, 0.75, 0.00, 0.13],
-  [0.07, 0.08, 0.82, 0.03]
-]
+if __name__ == "__main__":
+  X = [
+    ("x1", 0.35, "00"),
+    ("x2", 0.15, "01"),
+    ("x3", 0.50, "10"),
+  ]
+  M = [
+    [0.72, 0.04, 0.15, 0.09],
+    [0.12, 0.75, 0.00, 0.13],
+    [0.07, 0.08, 0.82, 0.03]
+  ]
 
-stats(X)
+  stats(X)
 
-# X = [
-#   ("A", 0.125),
-#   ("B", 0.125),
-#   ("C", 0.125),
-#   ("D", 0.125),
-#   ("E", 0.125),
-#   ("F", 0.125),
-#   ("G", 0.125),
-#   ("H", 0.125)
-# ]
-
-# def huffman(f: list):
-#   res = sorted((x[:2] for x in f), key=lambda x: x[1])
-#   while len(res) > 1:
-#     tmp = ((res[0], res[1]), res[0][1] + res[1][1])
-#     i = next((i for i in range(2, len(res)) if tmp[1] < res[i][1]), len(res))
-#     res = res[2:i] + [tmp] + res[i:]
-#   return res
-#
-# h = huffman(X)
-# print(h)
-#
-# def view(l, n="", depth=0):
-#   for t, num in zip(l[:2], ("1", "0")):
-#     base, value = t
-#     print("\t" * depth, value, f"{base} {n}" if isinstance(base, str) else f"  ({n})")
-#     if not isinstance(base, str): view(base, n + num, depth+1)
-#
-# view(h)
-
-# d = graphviz.Digraph()
-#
-# def rec(base, root=None, depth=0):
-#   for b, n in zip(base, (1, 0)):
-#     childs, value = b
-#     name = f"{n} ({value})"
-#     if isinstance(root, str): d.edge(root, childs if isinstance(childs, str) else name, label=str(n))
-#     print("\t" * depth, value, childs)
-#     if not isinstance(childs, str): rec(childs, name, depth=depth+1)
-# rec(h)
-#
-# d.view()
+  # X = [
+  #   ("A", 0.50, "1"),
+  #   ("B", 0.15, "011"),
+  #   ("C", 0.15, "010"),
+  #   ("D", 0.08, "001"),
+  #   ("E", 0.08, "0001"),
+  #   ("F", 0.02, "00001"),
+  #   ("G", 0.01, "000001"),
+  #   ("H", 0.01, "000000")
+  # ]
+  #
+  # X = [
+  #   ("A", 0.20),
+  #   ("B", 0.15),
+  #   ("C", 0.05),
+  #   ("D", 0.15),
+  #   ("E", 0.45)
+  # ]
+  #
+  # def huffman(f: list):
+  #   res = sorted((x[:2] for x in f), key=lambda x: x[1])
+  #   while len(res) > 1:
+  #     tmp = ((res[0], res[1]), res[0][1] + res[1][1])
+  #     i = next((i for i in range(2, len(res)) if tmp[1] <= res[i][1]), len(res))
+  #     res = res[2:i] + [tmp] + res[i:]
+  #   return res
+  #
+  # h = huffman(X)
+  # print(h)
+  #
+  # def view(l, name="", depth=0):
+  #   for tmp, n in zip(l, ("0", "1")):
+  #     base, value = tmp
+  #     print("\t" * depth, value, f"{base} {(name+n)[1:]}" if isinstance(base, str) else "")
+  #     if not isinstance(base, str): view(base, name+n, depth+1)
+  #
+  # view(h)
