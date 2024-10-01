@@ -25,6 +25,22 @@ def mutinfo(m: list, px: list, py: list | None = None) -> float:
   if py is None: py = proby(m, px)
   return sum(px[i] * m[i][j] * log(m[i][j] / py[j], 2) for i in range(len(m)) for j in range(len(m[i])) if 0 not in (py[j], m[i][j]))
 
+def _huffman_build(l, name=""):
+  ret = []
+  for tmp, n in zip(l, ("0", "1")):
+    base, value = tmp
+    if isinstance(base, str): ret.append((base, value, (name+n)[1:]))
+    else: ret += _huffman_build(base, name+n)
+  return ret
+
+def huffman(f: list):
+  res = sorted((x[:2] for x in f), key=lambda x: x[1])
+  while len(res) > 1:
+    tmp = ((res[0], res[1]), res[0][1] + res[1][1])
+    i = next((i for i in range(2, len(res)) if tmp[1] < res[i][1]), len(res))
+    res = res[2:i] + [tmp] + res[i:]
+  return sorted(_huffman_build(res), key=lambda x: x[1], reverse=True)
+
 def stats(f: list, m: list | None = None):
   print("src:")
   for x in f: print(f"{x[0]:<4} prob: {x[1]:<8}", f"sym: {x[2]}" if len(x) > 2 else "")
@@ -37,7 +53,6 @@ def stats(f: list, m: list | None = None):
   if m is not None:
     print(f"{'mutinfo:':>15} {mutinfo(m, probx(f))}")
     print(f"{'noise:':>15} {noise(f, m)}")
-  print()
 
 if __name__ == "__main__":
   X = [
@@ -50,43 +65,17 @@ if __name__ == "__main__":
     [0.12, 0.75, 0.00, 0.13],
     [0.07, 0.08, 0.82, 0.03]
   ]
+  stats(X, M)
 
+  X = [
+    ("A", 0.50, "1"),
+    ("B", 0.15, "011"),
+    ("C", 0.15, "010"),
+    ("D", 0.08, "001"),
+    ("E", 0.08, "0001"),
+    ("F", 0.02, "00001"),
+    ("G", 0.01, "000001"),
+    ("H", 0.01, "000000")
+  ]
+  X = huffman(X)
   stats(X)
-
-  # X = [
-  #   ("A", 0.50, "1"),
-  #   ("B", 0.15, "011"),
-  #   ("C", 0.15, "010"),
-  #   ("D", 0.08, "001"),
-  #   ("E", 0.08, "0001"),
-  #   ("F", 0.02, "00001"),
-  #   ("G", 0.01, "000001"),
-  #   ("H", 0.01, "000000")
-  # ]
-  #
-  # X = [
-  #   ("A", 0.20),
-  #   ("B", 0.15),
-  #   ("C", 0.05),
-  #   ("D", 0.15),
-  #   ("E", 0.45)
-  # ]
-  #
-  # def huffman(f: list):
-  #   res = sorted((x[:2] for x in f), key=lambda x: x[1])
-  #   while len(res) > 1:
-  #     tmp = ((res[0], res[1]), res[0][1] + res[1][1])
-  #     i = next((i for i in range(2, len(res)) if tmp[1] <= res[i][1]), len(res))
-  #     res = res[2:i] + [tmp] + res[i:]
-  #   return res
-  #
-  # h = huffman(X)
-  # print(h)
-  #
-  # def view(l, name="", depth=0):
-  #   for tmp, n in zip(l, ("0", "1")):
-  #     base, value = tmp
-  #     print("\t" * depth, value, f"{base} {(name+n)[1:]}" if isinstance(base, str) else "")
-  #     if not isinstance(base, str): view(base, name+n, depth+1)
-  #
-  # view(h)
